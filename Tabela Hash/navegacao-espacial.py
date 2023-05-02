@@ -4,7 +4,7 @@ class NaveEspacial:
         self.dado = [None]*quantidade_espacos
 
     def add(self, dado_x):
-        for i in range(self.quantidade_espacos): 
+        for i in range(self.quantidade_espacos):
             index = (dado_x + i) % self.quantidade_espacos
             if self.dado[index] == None:
                 self.dado[index] = dado_x
@@ -25,7 +25,8 @@ class NaveEspacial:
             return 'D'
         else:
             return 'A: ' + str(self.dado[memoria])
-            
+
+
 n = int(input())
 c = int(input())
 dados = NaveEspacial(n)
@@ -35,14 +36,14 @@ for i in range(c):
         dado_x = int(numero)
         resultado = dados.add(dado_x)
         if resultado != None:
-          print(resultado)
+            print(resultado)
     elif operacao == 'SCH':
         dado_d = int(numero)
         resultado = dados.sch(dado_d)
         if resultado != None:
-          print(resultado)
+            print(resultado)
     elif operacao == 'CAP':
         memoria = int(numero)
         resultado = dados.cap(memoria)
         if resultado != None:
-          print(resultado)
+            print(resultado)

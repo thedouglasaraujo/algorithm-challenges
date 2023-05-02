@@ -4,6 +4,7 @@ def pilhaImaculada(pilha):
             return False
     return True
 
+
 def novaLocacao(pilha, codigo):
     if pilhaImaculada(pilha) == True:
         for i in range(len(pilha)):
@@ -13,6 +14,7 @@ def novaLocacao(pilha, codigo):
         return pilha
     else:
         return "A pilha está um caos."
+
 
 pilha = input().split(",")
 codigo = int(input())

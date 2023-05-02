@@ -5,6 +5,7 @@ class No:
         self.direito = None
         self.pai = None
 
+
 class Arvore:
     def __init__(self):
         self.raiz = None
@@ -14,7 +15,7 @@ class Arvore:
             self.raiz = No(dado)
             print("0")
         else:
-            nivel = self.adicionar_na_posicao(self.raiz, dado, 1) 
+            nivel = self.adicionar_na_posicao(self.raiz, dado, 1)
             print(nivel - 1)
 
     def adicionar_na_posicao(self, no_atual, dado, nivel):
@@ -37,29 +38,29 @@ class Arvore:
 
     def nivel_no(self, no, nivel):
         if no == None:
-            return 0 
-        if no.pai == None: 
+            return 0
+        if no.pai == None:
             return nivel-1
         return self.nivel_no(no.pai, nivel + 1)
-        
+
     def buscar(self, dado):
         no_atual = self.raiz
         while no_atual != None:
             if no_atual.dado == dado:
                 return no_atual
             elif dado < no_atual.dado:
-                no_atual = no_atual.esquerdo 
+                no_atual = no_atual.esquerdo
             else:
-                no_atual = no_atual.direito 
+                no_atual = no_atual.direito
         return None
 
     def rotacionar_direita(self, no):
         pai = no.pai
         esquerdo = no.esquerdo
-        no.esquerdo = esquerdo.direito 
+        no.esquerdo = esquerdo.direito
         if no.esquerdo != None:
             no.esquerdo.pai = no
-        esquerdo.direito = no 
+        esquerdo.direito = no
         no.pai = esquerdo
         esquerdo.pai = pai
         if pai != None:
@@ -86,28 +87,29 @@ class Arvore:
                 pai.direito = direito
         else:
             self.raiz = direito
-            
+
     def atualizar_nivel(self, no, nivel):
-      if no != None:
-          self.atualizar_nivel(no.esquerdo, nivel+1)
-          self.atualizar_nivel(no.direito, nivel+1)
-          no.nivel = nivel
-    
+        if no != None:
+            self.atualizar_nivel(no.esquerdo, nivel+1)
+            self.atualizar_nivel(no.direito, nivel+1)
+            no.nivel = nivel
+
     def mover_para_topo(self, no):
-      if no.pai == None:
-          return '0'
-      elif no == self.raiz:
-          return '0'
-      while no.pai: 
-          if no.pai.esquerdo == no:
-              self.rotacionar_direita(no.pai) 
-          else:
-              self.rotacionar_esquerda(no.pai)
-          if no.pai == None:
-              self.raiz = no
-      self.atualizar_nivel(self.raiz, 1)
-      return self.nivel_no(no, 1)
-    
+        if no.pai == None:
+            return '0'
+        elif no == self.raiz:
+            return '0'
+        while no.pai:
+            if no.pai.esquerdo == no:
+                self.rotacionar_direita(no.pai)
+            else:
+                self.rotacionar_esquerda(no.pai)
+            if no.pai == None:
+                self.raiz = no
+        self.atualizar_nivel(self.raiz, 1)
+        return self.nivel_no(no, 1)
+
+
 busca_binaria = Arvore()
 while True:
     try:
@@ -118,10 +120,10 @@ while True:
         elif comando == 'SCH':
             no = busca_binaria.buscar(int(dado))
             if no is not None:
-              nivel_antes_mover = busca_binaria.nivel_no(no, 1)
-              print(nivel_antes_mover)
-              busca_binaria.mover_para_topo(no)
+                nivel_antes_mover = busca_binaria.nivel_no(no, 1)
+                print(nivel_antes_mover)
+                busca_binaria.mover_para_topo(no)
             if no is None:
-              print('-1')
+                print('-1')
     except EOFError:
-      break
+        break
