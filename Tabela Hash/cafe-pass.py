@@ -10,7 +10,7 @@ class Tabela:
         if self.tabela[i] == None:
             self.tabela[i] = [chave]
         else:
-            self.tabela[i].append(chave)
+            self.tabela[i].append(chave) 
             
     def get(self, chave):
         index = self.hashing(chave)
@@ -22,26 +22,25 @@ class Tabela:
 def cafe_pass(cpf, numero_aleatorio):
     digitos_multiplicados = [int(digito) * 10 for digito in cpf]
     tabela_hash = Tabela()
-    vazio = True
 
     for numero in digitos_multiplicados:
         tabela_hash.add(numero)
 
-    cpf_reduzido = []
     for chave in range(11):
-        if tabela_hash.tabela[chave] == None:
-          vazio = True
-        elif len(tabela_hash.tabela[chave]) == 1:
-            cpf_reduzido.append(tabela_hash.tabela[chave][0])
-        else:
-            cpf_reduzido.append(tabela_hash.tabela[chave][0] * len(tabela_hash.get(chave)))
-
+        if tabela_hash.tabela[chave] != None:
+            if len(tabela_hash.tabela[chave]) == 1:
+                continue 
+            else:
+                multiplicacao = tabela_hash.tabela[chave][0] * len(tabela_hash.get(chave))
+                tabela_hash.tabela[chave] = [multiplicacao]
+              
     numeros_verificados = []
-    for i in range(len(cpf_reduzido)):
-        if numero_aleatorio - cpf_reduzido[i] in numeros_verificados:
-            return "UP Permission"
-        if cpf_reduzido[i] not in numeros_verificados:
-            numeros_verificados.append(cpf_reduzido[i])
+    for i in range(11):
+        if tabela_hash.tabela[i] != None:
+          if numero_aleatorio - tabela_hash.tabela[i][0] in numeros_verificados:
+              return "UP Permission"
+          if tabela_hash.tabela[i][0] not in numeros_verificados:
+              numeros_verificados.append(tabela_hash.tabela[i][0])
     return "NOT Permission"
 
 n = int(input())

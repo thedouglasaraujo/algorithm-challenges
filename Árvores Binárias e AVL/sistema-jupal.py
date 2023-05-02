@@ -10,6 +10,40 @@ class Arvore_avl():
         self.altura = -1
         self.fator_balanceamento = 0
         
+    def imprimir_arvore(self, nivel=0):
+      if self.no != None: 
+          print(f"{self.no.nome}", end="")
+          if self.no.esquerdo.no != None or self.no.direito.no != None:
+              print(f" ajuda", end="")
+              if self.no.esquerdo.no != None:
+                  print(f" {self.no.esquerdo.no.nome}", end="") 
+              if self.no.direito.no != None:
+                  print(f" e {self.no.direito.no.nome}", end="")
+              print()
+              if self.no.esquerdo.no != None:
+                  self.no.esquerdo.imprimir_arvore(nivel+1)
+              if self.no.direito.no != None:
+                  self.no.direito.imprimir_arvore(nivel+1)
+          else:
+              print(" não ajuda ninguém")
+
+    def imprimir_subarvore(self, no, nivel=0):
+        if no != None:
+            print(f"{no.nome}", end="")
+            if no.esquerdo.no != None or no.direito.no != None:
+                print(f" ajuda", end="")
+                if no.esquerdo.no != None:
+                    print(f" {no.esquerdo.no.nome}", end="")
+                if no.direito.no != None:
+                    print(f" e {no.direito.no.nome}", end="")
+                print()
+                if no.esquerdo.no != None:
+                    self.imprimir_subarvore(no.esquerdo.no, nivel+1)
+                if no.direito.no != None:
+                    self.imprimir_subarvore(no.direito.no, nivel+1)
+            else:
+                print(" não ajuda ninguém")
+
     def inserir(self, nome):
         n = No_arvore(nome)
         if not self.no:
@@ -30,53 +64,51 @@ class Arvore_avl():
         elif nome < self.no.nome:
             return self.no.esquerdo.buscar(nome)
         else:
-            return self.no.direito.buscar(nome)    
+            return self.no.direito.buscar(nome)
     
     def balanceamento(self):
-        self.atualizar_altura(recursive=False)
+        self.atualizar_altura(recursivo=False)
         self.atualizar_balanceamento(False)
-        
-        while self.fator_balanceamento < -1 or self.fator_balanceamento > 1: 
+        while self.fator_balanceamento < -1 or self.fator_balanceamento > 1:
             if self.fator_balanceamento > 1:
                 if self.no.esquerdo.fator_balanceamento < 0:
                     self.no.esquerdo.rotacionar_esquerda()
                     self.atualizar_altura()
                     self.atualizar_balanceamento()
                 self.rotacionar_direita()
-                self.atualizar_altura()
                 self.atualizar_balanceamento()
+                self.atualizar_altura()
             elif self.fator_balanceamento < -1:
                 if self.no.direito.fator_balanceamento > 0:
                     self.no.direito.rotacionar_direita()
-                    self.atualizar_altura()
                     self.atualizar_balanceamento()
+                    self.atualizar_altura() 
                 self.rotacionar_esquerda()
                 self.atualizar_altura()
                 self.atualizar_balanceamento()
 
-    def atualizar_altura(self, recursive=True):
-        if self.no: 
-            if recursive: 
-                if self.no.esquerdo: 
+    def atualizar_altura(self, recursivo=True):
+        if self.no != None:
+            if recursivo == True:
+                if self.no.esquerdo != None:
                     self.no.esquerdo.atualizar_altura()
-                if self.no.direito:
-                    self.no.direito.atualizar_altura() 
+                if self.no.direito != None:
+                    self.no.direito.atualizar_altura()
             self.altura = 1 + max(self.no.esquerdo.altura, self.no.direito.altura)
         else: 
             self.altura = -1
 
-    def atualizar_balanceamento(self, recursive=True):
-        if self.no:
-            if recursive:
-                if self.no.esquerdo:
+    def atualizar_balanceamento(self, recursivo=True):
+        if self.no != None:
+            if recursivo == True: 
+                if self.no.esquerdo != None:
                     self.no.esquerdo.atualizar_balanceamento()
-                if self.no.direito:
+                if self.no.direito != None:
                     self.no.direito.atualizar_balanceamento()
             self.fator_balanceamento = self.no.esquerdo.altura - self.no.direito.altura
         else:
             self.fator_balanceamento = 0 
-
-            
+       
     def rotacionar_direita(self):
         nova_raiz = self.no.esquerdo.no
         subarvore_esquerda = nova_raiz.direito.no
@@ -87,70 +119,59 @@ class Arvore_avl():
 
     def rotacionar_esquerda(self):
         nova_raiz = self.no.direito.no
-        subarvore_esquerda = nova_raiz.esquerdo.no
-        antiga_raiz = self.no
+        subarvore_direita = nova_raiz.esquerdo.no
+        antiga_raiz = self.no 
         self.no = nova_raiz
-        antiga_raiz.direito.no = subarvore_esquerda
+        antiga_raiz.direito.no = subarvore_direita
         nova_raiz.esquerdo.no = antiga_raiz
 
     def deletar(self, nome):
         if self.no != None:
             if self.no.nome == nome:
-                if not self.no.esquerdo.no and not self.no.direito.no:
+                if self.no.esquerdo.no == None and self.no.direito.no == None:
                     self.no = None
-                elif not self.no.esquerdo.no:                
+                elif self.no.esquerdo.no == None:             
                     self.no = self.no.direito.no
-                elif not self.no.direito.no:
+                elif self.no.direito.no == None:
                     self.no = self.no.esquerdo.no
                 else:
-                    successor = self.no.direito.no  
-                    while successor and successor.esquerdo.no:
+                    successor = self.no.direito.no   
+                    while successor != None and successor.esquerdo.no != None:
                         successor = successor.esquerdo.no
-                    if successor:
+                    if successor != None:
                         self.no.nome = successor.nome
                         self.no.direito.deletar(successor.nome)
             elif nome < self.no.nome:
                 self.no.esquerdo.deletar(nome)
-
             elif nome > self.no.nome:
                 self.no.direito.deletar(nome)
             self.balanceamento()
 
     def percorrer(self):
         nos_restantes = []
-
         if not self.no:
             return nos_restantes
-        
         nos_restantes.extend(self.no.esquerdo.percorrer())
         nos_restantes.append(self.no.nome)
         nos_restantes.extend(self.no.direito.percorrer())
-
         return nos_restantes
     
-    def no_minimo(self, no=None):
-        if not no:
-            no = self.no
-        if not no.esquerdo.no:
-            return no
-        return self.no_minimo(no.esquerdo.no)
-        
     def minimo(arvore):
         if not arvore.no:
             return None
-        return arvore.no_minimo().nome
+        no = arvore.no
+        while no.esquerdo.no:
+            no = no.esquerdo.no
+        return no.nome
         
-    def no_maximo(self, no=None):
-        if not no:
-            no = self.no
-        if not no.direito.no:
-            return no
-        return self.no_maximo(no.direito.no)
         
     def maximo(arvore):
         if not arvore.no:
             return None
-        return arvore.no_maximo().nome
+        no = arvore.no
+        while no.direito.no: 
+            no = no.direito.no
+        return no.nome 
 
 arvore = Arvore_avl()
 receber_comando = True
@@ -169,9 +190,16 @@ while receber_comando == True:
           else: 
             arvore.deletar(nome)
             print(f"{nome} DELETADO")
+            
+      elif entrada == "VER":
+        arvore.imprimir_arvore()
+      
+      elif entrada[0:3] == "VER" and len(entrada) > 3:
+        comando, nome = entrada.split()
+        res = arvore.imprimir_subarvore(arvore.buscar(nome))
 
       elif entrada == "ALTURA":
-        altura = arvore.altura + 1
+        altura = arvore.altura+1
         print(f'ALTURA: {altura}')
 
       elif entrada == "MINIMO":
@@ -187,6 +215,7 @@ while receber_comando == True:
           print("ARVORE VAZIA")
         else:
           print(f'MAIOR: {maximo}')
+          
 
       elif entrada == "FIM":
         nos_restantes = arvore.percorrer()
@@ -197,7 +226,7 @@ while receber_comando == True:
           i = 0
           while i != tamanho:
             for no in nos_restantes:
-              if i == tamanho - 1:
+              if i == tamanho-1:
                 print(no)
               else:
                 print(no, end=' ')

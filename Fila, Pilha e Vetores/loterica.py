@@ -4,7 +4,6 @@ class No:
     self.valor = valor
     self.proximo = None
 
-
 class Fila:
   def __init__(self):
     self.primeiro = None
@@ -46,7 +45,6 @@ class Fila:
     self.ultimo = atual
     return no_removido
 
-
 fila1 = Fila()
 fila2 = Fila()
 total1 = 0.0
@@ -57,7 +55,7 @@ while receber_comando:
   comando = input()
 
   if comando[0:6] == "ENTROU":
-    x, nome, caixa, valor = comando.split() 
+    x, nome, caixa, valor = comando.split()
     caixa = int(caixa)
     valor = float(valor)
     if caixa == 1:
