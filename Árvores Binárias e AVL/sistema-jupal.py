@@ -233,3 +233,4 @@ while receber_comando == True:
                         print(no, end=' ')
                     i += 1
         receber_comando = False
+        
